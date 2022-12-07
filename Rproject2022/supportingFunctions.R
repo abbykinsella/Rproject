@@ -6,7 +6,6 @@ convertY <- function(dir) {
   for(i in 1:length(files)){
     curr <- paste(dir, files[i], sep="/")
     csv_curr <- read.table(file = curr, sep = " ", header = TRUE)
-    csv_curr_name <- paste(dir, gsub("txt", "csv", files[i]), sep = "/")
     write.csv(csv_curr, file = (paste(dir, gsub("txt", "csv", files[i]), sep = "/")), row.names = FALSE)
   }
 }
