@@ -49,6 +49,3 @@ compile <- function(dir, toWarn){
   write.csv(df, "all.csv", row.names=FALSE)
   return(df)
 }
-convertY("countryY")
-df <- compile("countryY", "warn")
-write.csv(df, file = "alldata.csv", row.names = FALSE)
