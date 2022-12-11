@@ -51,49 +51,62 @@ compile <- function(dir, toWarn){
   
   
   # handle NAs based on user input
-  if(toWarn == "1"){
+  if(toWarn == 1){
     if(sum(is.na(df))) {
       df <- na.omit(df)
     }
   }
   else{
     if(sum(is.na(df))) {
-      if(toWarn == "2") {
+      if(toWarn == 2) {
         print("Warning: NAs are present")   # only warn if 2 is selected
       }
     }
   }
-  
-  # write everything to a file!
-  write.csv(df, "all.csv", append=TRUE, row.names=FALSE)
   return(df)
 }
+
 
 ###### FUNCTION SUMMARIZE  ##########
 summarize <- function(file) {
   # number of screens run
+  print(paste("The numbers of screens run:", nrow(file)))
+
   # percent of patients screened that were infected
-  # male vs female patients
-  # age distribution of patients
+  num_infected = 0
+  num_males = 0
+  num_females = 0
+  min_age = 150
+  max_age = 0  
+  # go through each row of file
+  for(i in 1:nrow(file)){
+    # check if any of the markers did not equal 0
+    if(sum(file[i, 3:12]) > 0) {
+      num_infected = num_infected + 1
+    }
+    if(file[i, 1] == "male"){
+      num_males = num_males + 1
+    }
+    else {
+      num_females = num_females + 1
+    }
+    if(file[i, 2] > max_age){ 
+      max_age = file[i, 2]
+    }
+    if(file[i, 2] < min_age){ 
+      min_age = file[i, 2]
+    }
+  }
+  percent_infected = num_infected/(nrow(file))
+  print(paste("The percent of patients screened that were infected:", percent_infected))
   
-  summary = data.frame(matrix(ncol = 7, nrow = 0))
-  cols <- c("Num of Screens", "Patients Infected", "Male", "Female", "Age Min", "Age Max", "Age Mean")
-  colnames(summary) = cols
-
-  return(summary)
-}
-
-
-
-######## HELPER FUNCTIONS   ##########
-
-# helper function that asks user for choice regarding csv file with all the data
-get_choice <- function() {
-  print("1. Remove rows with NAs in any column")
-  print("2. Include NAs but be warned of their presence")
-  print("3. Include NAs but don't be warned")
-  choice = readline(prompt = "Enter any number : ")
-  return(choice)
+  # male vs female patients
+  print(paste("The percent of patients screened that were male:", num_males/(num_males + num_females)))
+  print(paste("The percent of patients screened that were female:", num_females/(num_males + num_females)))
+ 
+  # age distribution of patients
+  print(paste("The age distribution of the patients was", min_age, "to", max_age)) # not sure why 423 is one of the ages?
+  
 }
 
 

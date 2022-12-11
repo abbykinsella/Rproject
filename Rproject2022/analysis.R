@@ -23,31 +23,26 @@ convert_csv("countryY")
     # 1. remove rows with NAs in any column
     # 2. include NAs but be warned of their presence
     # 3. include NAs but don't be warned
-user_input <- get_choice()                  ######do we need to account for malicious users >:)
-
 
 # call compile function with choice
-    # clear any previous compiltions
+    # clear any previous compilations
 if (file.exists("all.csv")) {
   unlink("all.csv")
 }
-compile("countryX", user_input)
-compile("countryY", user_input)
+x_df <- compile("countryX", 2)
+y_df <- compile("countryY", 2)
+combined <- rbind(x_df, y_df)
+write.csv(combined, "all.csv", row.names = FALSE)
 
 
 
 ###### FUNCTION SUMMARIZE CALL ##########
-
-file <- "allData.csv"     # provided data, we can test with our file too 
-s <- summarize(file)
-
-
-
+file <- read.csv("allData.csv")   # provided data, we can test with our file too 
+summarize(file)
 
 
 ####### THINGS TO DO #########
 # 1. do we have to check if they put like an invalid number in
 # 2. i don't know how to check if 2 works, if it is actually catching those NAs
-# 3. write the summary function
-# 4. answer questions from beginning of PDF
+# 3. answer questions from beginning of PDF
 
